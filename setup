@@ -1,0 +1,20 @@
+#!/bin/bash
+
+wget=/usr/local/bin/wget
+tar=/usr/bin/tar
+
+if [ "$1" != "" ]; then
+   $wget "https://eecs280staff.github.io/${1}/starter-files.tar.gz"
+fi
+
+if [ -f ./*.tar.gz ]; then
+    $tar xvzf starter-files.tar.gz
+    mv starter-files/* .
+    rm -rf starter-files starter-files.tar.gz
+
+    for f in *.starter; do
+        mv -- "$f" "${f%.starter}"
+    done
+
+    echo "You're all set!"
+fi
