@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "$#" == 0 ] || [ "$#" -gt 2 ]; then
-    echo "usage: ./setup <project name> [directory]"
-    echo "       Project name must be typed as given in the"
-    echo "       wget url in the EECS 280 spec"
-    echo "       Examples: p2-cv, p1-stats"
+    printf "usage: ./setup <project name> [directory]\n"
+    printf "       Project name must be typed as given in the\n"
+    printf "       wget url in the EECS 280 spec\n"
+    printf "       Examples: p2-cv, p1-stats\n"
 
     exit 1
 fi
@@ -12,44 +12,48 @@ fi
 
 wget=$(which wget)
 if [ $? -ne 0 ]; then
-    echo "Could not locate the package wget. Have you installed it?"
+    printf "Could not locate the package wget. Have you installed it?\n"
     exit 2
 fi
 
 tar=$(which tar)
 if [ $? -ne 0 ]; then
-    echo "Could not locate the package tar. Have you installed it?"
+    printf "Could not locate the package tar. Have you installed it?\n"
 
     exit 2
 fi
 
 if [ "$1" != "" ]; then
-    echo "Beginning setup for ${1}...\n\n"
+    printf "Beginning setup for ${1}...\n\n\n"
     $wget "https://eecs280staff.github.io/${1}/starter-files.tar.gz"
 
     if [ $? -ne 0 ]; then
-        echo "Error: Could not find files for $1"
+        printf "Error: Could not find files for $1"
         exit 3
     fi
 
 fi
 
 if [ -f ./*.tar.gz ]; then
-    $tar xvzf starter-files.tar.gz
+    $tar xzf starter-files.tar.gz
 
     for f in starter-files/*.starter; do
         mv -- "$f" "${f%.starter}"
     done
-
-    echo "\n You're all set!"
 fi
 
 if [ "$2" != "" ]; then
+    printf "Creating directory ${2}...\n\n"
     mkdir -- $2
     mv starter-files/* $2
+    printf "Moving project files to ${2}/...\n\n"
     rm -rf starter-files starter-files.tar.gz
 else
+    printf "Creating directory ${1}...\n\n"
     mkdir -- $1
+    printf "Moving project files to ${1}/...\n\n"
     mv starter-files/* $1
     rm -rf starter-files starter-files.tar.gz
 fi
+
+printf "You're all set!\n"
