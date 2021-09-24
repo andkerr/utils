@@ -1,20 +1,55 @@
 #!/bin/bash
 
-wget=/usr/local/bin/wget
-tar=/usr/bin/tar
+if [ "$#" == 0 ] || [ "$#" -gt 2 ]; then
+    echo "usage: ./setup <project name> [directory]"
+    echo "       Project name must be typed as given in the"
+    echo "       wget url in the EECS 280 spec"
+    echo "       Example: p2-cv, p1-stats"
+
+    exit 1
+fi
+
+
+wget=$(which wget)
+if [ $? -ne 0 ]; then
+    echo "Could not locate the package wget. Have you installed it?"
+    exit 2
+fi
+
+tar=$(which tar)
+if [ $? -ne 0 ]; then
+    echo "Could not locate the package tar. Have you installed it?"
+
+    exit 2
+fi
 
 if [ "$1" != "" ]; then
-   $wget "https://eecs280staff.github.io/${1}/starter-files.tar.gz"
+    echo "Beginning setup for ${1}...\n\n"
+    $wget "https://eecs280staff.github.io/${1}/starter-files.tar.gz"
+
+    if [ $? -ne 0 ]; then
+        echo "Error: Could not find files for $1"
+        exit 3
+    fi
+
 fi
 
 if [ -f ./*.tar.gz ]; then
     $tar xvzf starter-files.tar.gz
-    mv starter-files/* .
-    rm -rf starter-files starter-files.tar.gz
 
-    for f in *.starter; do
+    for f in starter-files/*.starter; do
         mv -- "$f" "${f%.starter}"
     done
 
-    echo "You're all set!"
+    echo "\n You're all set!"
+fi
+
+if [ "$2" != "" ]; then
+    mkdir -- $2
+    mv starter-files/* $2
+    rm -rf starter-files starter-files.tar.gz
+else
+    mkdir -- $1
+    mv starter-files/* $1
+    rm -rf starter-files starter-files.tar.gz
 fi
