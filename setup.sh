@@ -9,7 +9,6 @@ if [ "$#" == 0 ] || [ "$#" -gt 2 ]; then
     exit 1
 fi
 
-
 wget=$(which wget)
 if [ $? -ne 0 ]; then
     printf "Could not locate the package wget. Have you installed it?\n"
@@ -42,18 +41,37 @@ if [ -f ./*.tar.gz ]; then
     done
 fi
 
+PROJECT_DIR=""
 if [ "$2" != "" ]; then
+    PROJECT_DIR=${2}
     printf "Creating directory ${2}...\n\n"
     mkdir -- $2
     mv starter-files/* $2
     printf "Moving project files to ${2}/...\n\n"
     rm -rf starter-files starter-files.tar.gz
 else
+    PROJECT_DIR=${1}
     printf "Creating directory ${1}...\n\n"
     mkdir -- $1
     printf "Moving project files to ${1}/...\n\n"
     mv starter-files/* $1
     rm -rf starter-files starter-files.tar.gz
 fi
+
+while true; do
+    read -p "Do you want to add the EECS 280 sample .gitignore? [y/n] " answer
+    case ${answer} in
+        [yY] | [yY][eE][sS])
+            printf "adding .gitignore...\n\n"
+            $wget https://eecs280staff.github.io/p1-stats/dot_gitignore_sample -O .gitignore
+            mv .gitignore ${PROJECT_DIR}
+            break
+            ;;
+        [nN] | [nN][oO]) break ;;
+        *)
+            printf "Please enter y or n.\n\n"
+            ;;
+    esac
+done
 
 printf "You're all set!\n"
