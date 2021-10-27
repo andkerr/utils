@@ -1,4 +1,4 @@
-# Utils
+Utils
 =======
 
 Andrew Kerr <kerrand@protonmail.com>
