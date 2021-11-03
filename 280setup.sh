@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "$#" == 0 ] || [ "$#" -gt 2 ]; then
-    printf "usage: ./setup <project name> [directory]\n"
+    printf "usage: 280setup <project name> [directory]\n"
     printf "       Project name must be typed as given in the\n"
     printf "       wget url in the EECS 280 spec\n"
     printf "       Examples: p2-cv, p1-stats\n"
@@ -9,22 +9,20 @@ if [ "$#" == 0 ] || [ "$#" -gt 2 ]; then
     exit 1
 fi
 
-wget=$(which wget)
-if [ $? -ne 0 ]; then
+if [ -z "$(which wget)" ]; then
     printf "Could not locate the package wget. Have you installed it?\n"
     exit 2
 fi
 
-tar=$(which tar)
-if [ $? -ne 0 ]; then
+if [ -z "$(which tar)" ]; then
     printf "Could not locate the package tar. Have you installed it?\n"
 
     exit 2
 fi
 
-if [ "$1" != "" ]; then
+if [ -n "$1" ]; then
     printf "Beginning setup for ${1}...\n\n\n"
-    $wget "https://eecs280staff.github.io/${1}/starter-files.tar.gz"
+    wget "https://eecs280staff.github.io/${1}/starter-files.tar.gz"
 
     if [ $? -ne 0 ]; then
         printf "Error: Could not find files for $1"
@@ -34,7 +32,7 @@ if [ "$1" != "" ]; then
 fi
 
 if [ -f ./*.tar.gz ]; then
-    $tar xzf starter-files.tar.gz
+    tar xzf starter-files.tar.gz
 
     for f in starter-files/*.starter; do
         mv -- "$f" "${f%.starter}"
@@ -42,7 +40,7 @@ if [ -f ./*.tar.gz ]; then
 fi
 
 PROJECT_DIR=""
-if [ "$2" != "" ]; then
+if [ -n "$2" ]; then
     PROJECT_DIR=${2}
     printf "Creating directory ${2}...\n\n"
     mkdir -- $2
@@ -63,7 +61,7 @@ while true; do
     case ${answer} in
         [yY] | [yY][eE][sS])
             printf "adding .gitignore...\n\n"
-            $wget https://eecs280staff.github.io/p1-stats/dot_gitignore_sample -O .gitignore
+            wget https://eecs280staff.github.io/p1-stats/dot_gitignore_sample -O .gitignore
             mv .gitignore ${PROJECT_DIR}
             break
             ;;

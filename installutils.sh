@@ -8,6 +8,6 @@ fi
 
 for file in *; do
     if [ -x $file ] && [ $file != "installutils.sh" ]; then
-        cp $file $HOME/bin/${file%.*}
+        cp -v $file $HOME/bin/${file%.*}
     fi
 done
