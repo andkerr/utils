@@ -1,9 +1,9 @@
 if [ ! -d $HOME/bin/ ]; then
-    # create a directory for custom shell scripts, and
-    # add it to the PATH env variable, if it doesn't exist
+    # create a directory for custom shell scripts and
+    # add it to the PATH env variable if it doesn't exist
     echo "HOME/bin does not exist, creating..."
     mkdir $HOME/bin/
-    PATH=$PATH:$HOME/bin
+    export PATH=$PATH:$HOME/bin
 fi
 
 for file in *; do
